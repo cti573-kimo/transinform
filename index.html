@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>轉學生報名表</title>
+  <style>
+    :root {
+      --bg: #f5f7fb;
+      --panel: #ffffff;
+      --primary: #234f9d;
+      --primary-dark: #1a3d80;
+      --text: #1f2937;
+      --muted: #6b7280;
+      --border: #dfe7f5;
+      --shadow: 0 10px 24px rgba(16, 24, 40, 0.08);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: "Segoe UI", "Microsoft JhengHei", sans-serif;
+      background: linear-gradient(180deg, #eef4ff 0%, var(--bg) 100%);
+      color: var(--text);
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 40px auto;
+      padding: 24px;
+    }
+
+    .header {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      box-shadow: var(--shadow);
+      padding: 28px 32px;
+      margin-bottom: 24px;
+    }
+
+    .header h1 {
+      margin: 0 0 8px;
+      font-size: 2rem;
+      color: var(--primary-dark);
+    }
+
+    .header p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.98rem;
+    }
+
+    .form-card {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      box-shadow: var(--shadow);
+      padding: 24px 28px;
+    }
+
+    .section {
+      margin-bottom: 28px;
+      padding-bottom: 18px;
+      border-bottom: 1px solid #edf1f7;
+    }
+
+    .section:last-child {
+      border-bottom: none;
+      margin-bottom: 0;
+      padding-bottom: 0;
+    }
+
+    .section-title {
+      font-weight: 700;
+      color: var(--primary-dark);
+      margin-bottom: 18px;
+      font-size: 1.2rem;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(220px, 1fr));
+      gap: 18px 22px;
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .field.full {
+      grid-column: 1 / -1;
+    }
+
+    label {
+      font-weight: 600;
+      color: var(--text);
+      font-size: 0.95rem;
+    }
+
+    input, select, textarea {
+      width: 100%;
+      padding: 12px 14px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: #fff;
+      font-size: 0.98rem;
+      color: var(--text);
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    input:focus, select:focus, textarea:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(35, 79, 157, 0.12);
+    }
+
+    textarea {
+      min-height: 100px;
+      resize: vertical;
+    }
+
+    .actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 12px;
+      margin-top: 28px;
+    }
+
+    button {
+      border: none;
+      border-radius: 10px;
+      padding: 13px 22px;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 0.15s ease, opacity 0.2s ease;
+    }
+
+    button:hover {
+      transform: translateY(-1px);
+    }
+
+    .btn-reset {
+      background: #eef2f7;
+      color: var(--text);
+    }
+
+    .btn-submit {
+      background: var(--primary);
+      color: #fff;
+    }
+
+    .btn-submit:hover {
+      background: var(--primary-dark);
+    }
+
+    .result-box {
+      margin-top: 24px;
+      background: #f8fbff;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px 18px;
+      display: none;
+    }
+
+    .result-box.active {
+      display: block;
+    }
+
+    pre {
+      margin: 0;
+      white-space: pre-wrap;
+      word-break: break-word;
+      font-family: Consolas, monospace;
+      font-size: 0.9rem;
+      color: #1f2937;
+    }
+
+    @media (max-width: 768px) {
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .container {
+        padding: 16px;
+      }
+
+      .header, .form-card {
+        padding: 20px 18px;
+      }
+
+      .actions {
+        flex-direction: column-reverse;
+      }
+
+      button {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>轉學生報名表</h1>
+      <p>本系統將自動產生報名編號，請依實際資料填寫。</p>
+    </div>
+
+    <form id="applicationForm" class="form-card">
+      <div class="section">
+        <div class="section-title">基本資料</div>
+
+        <div class="form-grid">
+          <div class="field">
+            <label for="sno">SNO</label>
+            <input id="sno" name="sno" type="text" readonly />
+          </div>
+
+          <div class="field">
+            <label for="registerDate">登錄日期</label>
+            <input id="registerDate" name="registerDate" type="date" required />
+          </div>
+
+          <div class="field">
+            <label for="department">科系</label>
+            <select id="department" name="department" required>
+              <option value="">請選擇科系</option>
+              <option value="101">普通科（101）</option>
+              <option value="401">商業經營科（401）</option>
+              <option value="407">觀光事業科（407）</option>
+              <option value="430">多媒體設計科（430）</option>
+              <option value="433">應用英語科（433）</option>
+              <option value="434">應用日語科（434）</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="studentName">姓名</label>
+            <input id="studentName" name="studentName" type="text" placeholder="請輸入姓名" required />
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">原學校資料</div>
+
+        <div class="form-grid">
+          <div class="field">
+            <label for="originalSchoolName">原學校名稱</label>
+            <input id="originalSchoolName" name="originalSchoolName" type="text" placeholder="請輸入原就讀學校名稱" required />
+          </div>
+
+          <div class="field">
+            <label for="originalDepartment">原學校科組</label>
+            <input id="originalDepartment" name="originalDepartment" type="text" placeholder="例如：資訊科、會計科、設計科" required />
+          </div>
+
+          <div class="field">
+            <label for="originalStudentId">原學校學號</label>
+            <input id="originalStudentId" name="originalStudentId" type="text" placeholder="請輸入原學校學號" />
+          </div>
+
+          <div class="field">
+            <label for="originalSemester">原學校學期</label>
+            <input id="originalSemester" name="originalSemester" type="text" placeholder="例如：第 3 學期 / 109-2" />
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">聯絡資訊</div>
+
+        <div class="form-grid">
+          <div class="field">
+            <label for="studentPhone">學生手機</label>
+            <input id="studentPhone" name="studentPhone" type="tel" placeholder="例如：0912-345-678" required />
+          </div>
+
+          <div class="field">
+            <label for="studentEmail">學生信箱</label>
+            <input id="studentEmail" name="studentEmail" type="email" placeholder="例如：student@example.com" required />
+          </div>
+
+          <div class="field">
+            <label for="householdZip">戶籍區號</label>
+            <input id="householdZip" name="householdZip" type="text" placeholder="例如：100" />
+          </div>
+
+          <div class="field">
+            <label for="phone">電話</label>
+            <input id="phone" name="phone" type="tel" placeholder="例如：04-12345678" />
+          </div>
+
+          <div class="field full">
+            <label for="householdAddress">戶籍地址</label>
+            <input id="householdAddress" name="householdAddress" type="text" placeholder="請輸入完整戶籍地址" required />
+          </div>
+
+          <div class="field">
+            <label for="mailZip">郵遞區號</label>
+            <input id="mailZip" name="mailZip" type="text" placeholder="例如：300" />
+          </div>
+
+          <div class="field full">
+            <label for="mailAddress">通訊地址</label>
+            <input id="mailAddress" name="mailAddress" type="text" placeholder="請輸入通訊地址" required />
+          </div>
+
+          <div class="field">
+            <label for="contactPerson">連絡人</label>
+            <input id="contactPerson" name="contactPerson" type="text" placeholder="請輸入連絡人姓名" />
+          </div>
+
+          <div class="field">
+            <label for="contactPhone">連絡電話</label>
+            <input id="contactPhone" name="contactPhone" type="tel" placeholder="請輸入連絡電話" />
+          </div>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button type="reset" class="btn-reset">重填</button>
+        <button type="submit" class="btn-submit">送出報名</button>
+      </div>
+    </form>
+
+    <div id="resultBox" class="result-box">
+      <pre id="resultContent"></pre>
+    </div>
+  </div>
+
+  <script>
+    function generateSno() {
+      const now = new Date();
+      const yy = String(now.getFullYear()).slice(-2);
+      const mm = String(now.getMonth() + 1).padStart(2, '0');
+      const dd = String(now.getDate()).padStart(2, '0');
+      const hh = String(now.getHours()).padStart(2, '0');
+      return `${yy}${mm}${dd}${hh}`;
+    }
+
+    document.getElementById('sno').value = generateSno();
+
+    const dateInput = document.getElementById('registerDate');
+    if (dateInput) {
+      const today = new Date();
+      const yyyy = today.getFullYear();
+      const mm = String(today.getMonth() + 1).padStart(2, '0');
+      const dd = String(today.getDate()).padStart(2, '0');
+      dateInput.value = `${yyyy}-${mm}-${dd}`;
+    }
+
+    document.getElementById('applicationForm').addEventListener('submit', function (e) {
+      e.preventDefault();
+
+      const formData = new FormData(this);
+      const data = Object.fromEntries(formData.entries());
+
+      const resultBox = document.getElementById('resultBox');
+      const resultContent = document.getElementById('resultContent');
+
+      resultContent.textContent = JSON.stringify(data, null, 2);
+      resultBox.classList.add('active');
+
+      alert('報名資料已送出！');
+    });
+  </script>
+</body>
+</html>
