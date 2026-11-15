@@ -1,0 +1,33 @@
+<!doctype html><html lang="zh-Hant"><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>金甌女中｜管理後台登入</title>
+<style>body{font:16px system-ui,sans-serif;background:#f3f5f0;color:#20322c;margin:0;padding:36px 18px}main{max-width:420px;margin:auto;background:white;border:1px solid #dfe6dd;border-top:5px solid #eab72d;border-radius:12px;padding:24px}label,input,button{display:block}input,button{font:inherit;box-sizing:border-box;padding:10px;margin-top:8px;border-radius:8px}input{width:100%;border:1px solid #a7b5a9}button{background:#244d3b;color:white;border:0}#status{color:#992f2e}</style>
+<main>
+<h1>金甌女中管理後台</h1>
+<form id="login">
+<label for="password">管理密碼</label>
+<input type="password" id="password" autocomplete="current-password" required autofocus>
+<button type="submit">登入</button>
+<p id="status" role="status"></p>
+</form></main>
+<script>
+const form = document.getElementById('login');
+form.onsubmit = async e => {
+  e.preventDefault();
+  const button = form.querySelector('button');
+  const status = document.getElementById('status');
+  button.disabled = true;
+  status.textContent = '';
+  try {
+    const response = await fetch('/api/admin/login', {method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({password:document.getElementById('password').value})});
+    if (response.ok) location.replace('/admin');
+    else status.textContent = (await response.json()).error;
+  } catch {
+    status.textContent = '無法連線，請稍後再試。';
+  } finally {
+    button.disabled = false;
+  }
+};
+</script></html>
